@@ -1,5 +1,6 @@
-export const config = {
-  'inputFolder': './input',
-  'outputFolder': './output',
-  'audioFolder': './audio'
+export const Config = {
+  'inputFolder': 'input',
+  'outputFolder': 'output',
+  'audioFolder': 'audio',
+  debug: false
 }
