@@ -1,0 +1,24 @@
+{
+  "name": "transcriptor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@tsconfig/node16": "^16.1.0",
+    "@types/ffmpeg": "^1.0.4",
+    "@types/node": "^20.4.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^5.6.0",
+    "chalk": "^5.3.0",
+    "ffmpeg": "^0.0.4"
+  }
+}
