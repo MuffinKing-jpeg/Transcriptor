@@ -7,6 +7,7 @@ import {Storage} from '@google-cloud/storage';
 import IRecognizeRequest = google.cloud.speech.v1.IRecognizeRequest;
 import IRecognitionConfig = google.cloud.speech.v1.IRecognitionConfig;
 import IRecognitionAudio = google.cloud.speech.v1.IRecognitionAudio;
+import {text} from 'stream/consumers';
 
 export function transcriptor(list: string[]): Promise<void> {
   return new Promise<void>(async () => {
@@ -45,12 +46,21 @@ export function transcriptor(list: string[]): Promise<void> {
             if (response.results) {
               const transcription = response.results
                 .map(result => result.alternatives)
+              const transcriptionTXT = response.results
+                .map(result => result.alternatives && result.alternatives[0].transcript)
+                .join('/n')
               const jsonFileName = list[i] + '.transcription.json'
+              const textFileName = list[i] + '.transcription.txt'
 
-              writeFile(Config.outputFolder + '/' + jsonFileName, JSON.stringify(transcription, null, 4))
-                .then(() => {
-                  console.log(chalk.green('Transcription saved to file:'), chalk.magenta(jsonFileName));
-                })
+
+              Promise.all([
+                writeFile(Config.outputFolder + '/' + jsonFileName, JSON.stringify(transcription, null, 4))
+                  .then(() => {
+                    console.log(chalk.green('Transcription saved to files:'), chalk.magenta(jsonFileName));
+                  }),
+                writeFile(Config.outputFolder + '/' + textFileName, transcriptionTXT)
+              ])
+
 
             }
           })
