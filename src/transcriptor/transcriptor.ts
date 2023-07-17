@@ -25,7 +25,7 @@ export function transcriptor(list: string[]): Promise<void> {
       enableAutomaticPunctuation: true,
       enableSpokenPunctuation: {value: true},
 
-      model: 'default'
+      model: 'latest_long'
     };
 
     for (let i = 0; i < list.length; i++) {
@@ -48,20 +48,17 @@ export function transcriptor(list: string[]): Promise<void> {
                 .map(result => result.alternatives)
               const transcriptionTXT = response.results
                 .map(result => result.alternatives && result.alternatives[0].transcript)
-                .join('/n')
+                .join('\n')
               const jsonFileName = list[i] + '.transcription.json'
               const textFileName = list[i] + '.transcription.txt'
 
 
-              Promise.all([
-                writeFile(Config.outputFolder + '/' + jsonFileName, JSON.stringify(transcription, null, 4))
-                  .then(() => {
-                    console.log(chalk.green('Transcription saved to files:'), chalk.magenta(jsonFileName));
-                  }),
+             Promise.all([
+                writeFile(Config.outputFolder + '/' + jsonFileName, JSON.stringify(transcription, null, 4)),
                 writeFile(Config.outputFolder + '/' + textFileName, transcriptionTXT)
-              ])
-
-
+              ]).then(()=> {
+               console.log(chalk.green('Transcription saved to files:'), chalk.magenta(textFileName),',', chalk.magenta(jsonFileName));
+             })
             }
           })
 
